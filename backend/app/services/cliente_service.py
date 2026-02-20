@@ -19,13 +19,35 @@ class ClienteService():
         return cliente
     
     @staticmethod
-    def listar(pag_ini: int = 1, pag_fin: int = 10):
-        paginacion = Cliente.query.paginate(
+    def listar(pag_ini: int = 1, pag_fin: int = 10, filtros = None):
+        query = Cliente.query
+        if filtros:
+            if "tipo" in filtros:
+                query = query.filter(
+                    Cliente.tipo == filtros["tipo"]
+                )
+            if "nombre" in filtros:
+                query = query.filter(
+                    Cliente.nombre.ilike(f'%{filtros["nombre"]}%')
+                )
+            if "apellido" in filtros:
+                query = query.filter(
+                    Cliente.email_contacto.ilike(f'%{filtros["apellido"]}%')
+                )
+            if "razon_social" in filtros:
+                query = query.filter(
+                    Cliente.email_contacto.ilike(f'%{filtros["razon_social"]}%')
+                )
+        # paginacion = Cliente.query.paginate(
+        #     page= pag_ini,
+        #     per_page= pag_fin,
+        #     error_out= False
+        # )
+        return query.paginate(
             page= pag_ini,
             per_page= pag_fin,
             error_out= False
         )
-        return paginacion
     
     @staticmethod
     def actualizar(id_cliente: int, data: dict) -> Cliente:

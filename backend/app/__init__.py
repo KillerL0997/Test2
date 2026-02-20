@@ -2,6 +2,7 @@ from flask import Flask
 from app.extensions import db, migrate
 from app.routes.clientes import cliente_bp
 from app.routes.usuarios import usuario_bp
+from app.errors.handlers import register_error_handlers
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +16,7 @@ def create_app():
 
     app.register_blueprint(cliente_bp)
     app.register_blueprint(usuario_bp)
+    register_error_handlers(app)
 
     from app.models import rol, usuario, cliente
 
